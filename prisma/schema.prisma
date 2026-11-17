@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model TodoItem {
+  id           Int        @id @default(autoincrement())
+  title        String
+  description  String?
+  statusId     Int
+  categorizeId Int
+  createdAt    DateTime   @default(now())
+  dueDate      DateTime?
+
+  status       Status     @relation(fields: [statusId], references: [id])
+  categorize   Categorize @relation(fields: [categorizeId], references: [id])
+}
+
+model Status {
+  id        Int        @id @default(autoincrement())
+  name      String
+  todoItems TodoItem[]
+}
+
+model Categorize {
+  id        Int        @id @default(autoincrement())
+  name      String
+  todoItems TodoItem[]
+}
