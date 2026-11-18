@@ -28,88 +28,108 @@ export type AggregateTodoItem = {
 
 export type TodoItemAvgAggregateOutputType = {
   id: number | null
-  statusId: number | null
-  categorizeId: number | null
+  status: number | null
+  createdByID: number | null
+  assignedToID: number | null
+  categoriesID: number | null
 }
 
 export type TodoItemSumAggregateOutputType = {
   id: number | null
-  statusId: number | null
-  categorizeId: number | null
+  status: number | null
+  createdByID: number | null
+  assignedToID: number | null
+  categoriesID: number | null
 }
 
 export type TodoItemMinAggregateOutputType = {
   id: number | null
   title: string | null
   description: string | null
-  statusId: number | null
-  categorizeId: number | null
+  status: number | null
   createdAt: Date | null
   dueDate: Date | null
+  createdByID: number | null
+  assignedToID: number | null
+  categoriesID: number | null
 }
 
 export type TodoItemMaxAggregateOutputType = {
   id: number | null
   title: string | null
   description: string | null
-  statusId: number | null
-  categorizeId: number | null
+  status: number | null
   createdAt: Date | null
   dueDate: Date | null
+  createdByID: number | null
+  assignedToID: number | null
+  categoriesID: number | null
 }
 
 export type TodoItemCountAggregateOutputType = {
   id: number
   title: number
   description: number
-  statusId: number
-  categorizeId: number
+  status: number
   createdAt: number
   dueDate: number
+  createdByID: number
+  assignedToID: number
+  categoriesID: number
   _all: number
 }
 
 
 export type TodoItemAvgAggregateInputType = {
   id?: true
-  statusId?: true
-  categorizeId?: true
+  status?: true
+  createdByID?: true
+  assignedToID?: true
+  categoriesID?: true
 }
 
 export type TodoItemSumAggregateInputType = {
   id?: true
-  statusId?: true
-  categorizeId?: true
+  status?: true
+  createdByID?: true
+  assignedToID?: true
+  categoriesID?: true
 }
 
 export type TodoItemMinAggregateInputType = {
   id?: true
   title?: true
   description?: true
-  statusId?: true
-  categorizeId?: true
+  status?: true
   createdAt?: true
   dueDate?: true
+  createdByID?: true
+  assignedToID?: true
+  categoriesID?: true
 }
 
 export type TodoItemMaxAggregateInputType = {
   id?: true
   title?: true
   description?: true
-  statusId?: true
-  categorizeId?: true
+  status?: true
   createdAt?: true
   dueDate?: true
+  createdByID?: true
+  assignedToID?: true
+  categoriesID?: true
 }
 
 export type TodoItemCountAggregateInputType = {
   id?: true
   title?: true
   description?: true
-  statusId?: true
-  categorizeId?: true
+  status?: true
   createdAt?: true
   dueDate?: true
+  createdByID?: true
+  assignedToID?: true
+  categoriesID?: true
   _all?: true
 }
 
@@ -203,10 +223,12 @@ export type TodoItemGroupByOutputType = {
   id: number
   title: string
   description: string | null
-  statusId: number
-  categorizeId: number
+  status: number
   createdAt: Date
   dueDate: Date | null
+  createdByID: number | null
+  assignedToID: number | null
+  categoriesID: number | null
   _count: TodoItemCountAggregateOutputType | null
   _avg: TodoItemAvgAggregateOutputType | null
   _sum: TodoItemSumAggregateOutputType | null
@@ -236,24 +258,30 @@ export type TodoItemWhereInput = {
   id?: Prisma.IntFilter<"TodoItem"> | number
   title?: Prisma.StringFilter<"TodoItem"> | string
   description?: Prisma.StringNullableFilter<"TodoItem"> | string | null
-  statusId?: Prisma.IntFilter<"TodoItem"> | number
-  categorizeId?: Prisma.IntFilter<"TodoItem"> | number
+  status?: Prisma.IntFilter<"TodoItem"> | number
   createdAt?: Prisma.DateTimeFilter<"TodoItem"> | Date | string
   dueDate?: Prisma.DateTimeNullableFilter<"TodoItem"> | Date | string | null
-  status?: Prisma.XOR<Prisma.StatusScalarRelationFilter, Prisma.StatusWhereInput>
-  categorize?: Prisma.XOR<Prisma.CategorizeScalarRelationFilter, Prisma.CategorizeWhereInput>
+  createdByID?: Prisma.IntNullableFilter<"TodoItem"> | number | null
+  assignedToID?: Prisma.IntNullableFilter<"TodoItem"> | number | null
+  categoriesID?: Prisma.IntNullableFilter<"TodoItem"> | number | null
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  assignedTo?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  categories?: Prisma.XOR<Prisma.CategoriesNullableScalarRelationFilter, Prisma.CategoriesWhereInput> | null
 }
 
 export type TodoItemOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  statusId?: Prisma.SortOrder
-  categorizeId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   dueDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.StatusOrderByWithRelationInput
-  categorize?: Prisma.CategorizeOrderByWithRelationInput
+  createdByID?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignedToID?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoriesID?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdBy?: Prisma.UserOrderByWithRelationInput
+  assignedTo?: Prisma.UserOrderByWithRelationInput
+  categories?: Prisma.CategoriesOrderByWithRelationInput
 }
 
 export type TodoItemWhereUniqueInput = Prisma.AtLeast<{
@@ -263,22 +291,27 @@ export type TodoItemWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.TodoItemWhereInput | Prisma.TodoItemWhereInput[]
   title?: Prisma.StringFilter<"TodoItem"> | string
   description?: Prisma.StringNullableFilter<"TodoItem"> | string | null
-  statusId?: Prisma.IntFilter<"TodoItem"> | number
-  categorizeId?: Prisma.IntFilter<"TodoItem"> | number
+  status?: Prisma.IntFilter<"TodoItem"> | number
   createdAt?: Prisma.DateTimeFilter<"TodoItem"> | Date | string
   dueDate?: Prisma.DateTimeNullableFilter<"TodoItem"> | Date | string | null
-  status?: Prisma.XOR<Prisma.StatusScalarRelationFilter, Prisma.StatusWhereInput>
-  categorize?: Prisma.XOR<Prisma.CategorizeScalarRelationFilter, Prisma.CategorizeWhereInput>
+  createdByID?: Prisma.IntNullableFilter<"TodoItem"> | number | null
+  assignedToID?: Prisma.IntNullableFilter<"TodoItem"> | number | null
+  categoriesID?: Prisma.IntNullableFilter<"TodoItem"> | number | null
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  assignedTo?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  categories?: Prisma.XOR<Prisma.CategoriesNullableScalarRelationFilter, Prisma.CategoriesWhereInput> | null
 }, "id">
 
 export type TodoItemOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  statusId?: Prisma.SortOrder
-  categorizeId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   dueDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdByID?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignedToID?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoriesID?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TodoItemCountOrderByAggregateInput
   _avg?: Prisma.TodoItemAvgOrderByAggregateInput
   _max?: Prisma.TodoItemMaxOrderByAggregateInput
@@ -293,63 +326,76 @@ export type TodoItemScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"TodoItem"> | number
   title?: Prisma.StringWithAggregatesFilter<"TodoItem"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"TodoItem"> | string | null
-  statusId?: Prisma.IntWithAggregatesFilter<"TodoItem"> | number
-  categorizeId?: Prisma.IntWithAggregatesFilter<"TodoItem"> | number
+  status?: Prisma.IntWithAggregatesFilter<"TodoItem"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TodoItem"> | Date | string
   dueDate?: Prisma.DateTimeNullableWithAggregatesFilter<"TodoItem"> | Date | string | null
+  createdByID?: Prisma.IntNullableWithAggregatesFilter<"TodoItem"> | number | null
+  assignedToID?: Prisma.IntNullableWithAggregatesFilter<"TodoItem"> | number | null
+  categoriesID?: Prisma.IntNullableWithAggregatesFilter<"TodoItem"> | number | null
 }
 
 export type TodoItemCreateInput = {
   title: string
   description?: string | null
+  status: number
   createdAt?: Date | string
   dueDate?: Date | string | null
-  status: Prisma.StatusCreateNestedOneWithoutTodoItemsInput
-  categorize: Prisma.CategorizeCreateNestedOneWithoutTodoItemsInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedTodosInput
+  assignedTo?: Prisma.UserCreateNestedOneWithoutAssignedTodosInput
+  categories?: Prisma.CategoriesCreateNestedOneWithoutTodoItemsInput
 }
 
 export type TodoItemUncheckedCreateInput = {
   id?: number
   title: string
   description?: string | null
-  statusId: number
-  categorizeId: number
+  status: number
   createdAt?: Date | string
   dueDate?: Date | string | null
+  createdByID?: number | null
+  assignedToID?: number | null
+  categoriesID?: number | null
 }
 
 export type TodoItemUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.StatusUpdateOneRequiredWithoutTodoItemsNestedInput
-  categorize?: Prisma.CategorizeUpdateOneRequiredWithoutTodoItemsNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedTodosNestedInput
+  assignedTo?: Prisma.UserUpdateOneWithoutAssignedTodosNestedInput
+  categories?: Prisma.CategoriesUpdateOneWithoutTodoItemsNestedInput
 }
 
 export type TodoItemUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  statusId?: Prisma.IntFieldUpdateOperationsInput | number
-  categorizeId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  assignedToID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  categoriesID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type TodoItemCreateManyInput = {
   id?: number
   title: string
   description?: string | null
-  statusId: number
-  categorizeId: number
+  status: number
   createdAt?: Date | string
   dueDate?: Date | string | null
+  createdByID?: number | null
+  assignedToID?: number | null
+  categoriesID?: number | null
 }
 
 export type TodoItemUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -358,52 +404,64 @@ export type TodoItemUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  statusId?: Prisma.IntFieldUpdateOperationsInput | number
-  categorizeId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  assignedToID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  categoriesID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type TodoItemCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  statusId?: Prisma.SortOrder
-  categorizeId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   dueDate?: Prisma.SortOrder
+  createdByID?: Prisma.SortOrder
+  assignedToID?: Prisma.SortOrder
+  categoriesID?: Prisma.SortOrder
 }
 
 export type TodoItemAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  statusId?: Prisma.SortOrder
-  categorizeId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  createdByID?: Prisma.SortOrder
+  assignedToID?: Prisma.SortOrder
+  categoriesID?: Prisma.SortOrder
 }
 
 export type TodoItemMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  statusId?: Prisma.SortOrder
-  categorizeId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   dueDate?: Prisma.SortOrder
+  createdByID?: Prisma.SortOrder
+  assignedToID?: Prisma.SortOrder
+  categoriesID?: Prisma.SortOrder
 }
 
 export type TodoItemMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  statusId?: Prisma.SortOrder
-  categorizeId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   dueDate?: Prisma.SortOrder
+  createdByID?: Prisma.SortOrder
+  assignedToID?: Prisma.SortOrder
+  categoriesID?: Prisma.SortOrder
 }
 
 export type TodoItemSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  statusId?: Prisma.SortOrder
-  categorizeId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  createdByID?: Prisma.SortOrder
+  assignedToID?: Prisma.SortOrder
+  categoriesID?: Prisma.SortOrder
 }
 
 export type TodoItemListRelationFilter = {
@@ -424,14 +482,6 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -440,130 +490,192 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type TodoItemCreateNestedManyWithoutStatusInput = {
-  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutStatusInput, Prisma.TodoItemUncheckedCreateWithoutStatusInput> | Prisma.TodoItemCreateWithoutStatusInput[] | Prisma.TodoItemUncheckedCreateWithoutStatusInput[]
-  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutStatusInput | Prisma.TodoItemCreateOrConnectWithoutStatusInput[]
-  createMany?: Prisma.TodoItemCreateManyStatusInputEnvelope
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type TodoItemCreateNestedManyWithoutCategoriesInput = {
+  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutCategoriesInput, Prisma.TodoItemUncheckedCreateWithoutCategoriesInput> | Prisma.TodoItemCreateWithoutCategoriesInput[] | Prisma.TodoItemUncheckedCreateWithoutCategoriesInput[]
+  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutCategoriesInput | Prisma.TodoItemCreateOrConnectWithoutCategoriesInput[]
+  createMany?: Prisma.TodoItemCreateManyCategoriesInputEnvelope
   connect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
 }
 
-export type TodoItemUncheckedCreateNestedManyWithoutStatusInput = {
-  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutStatusInput, Prisma.TodoItemUncheckedCreateWithoutStatusInput> | Prisma.TodoItemCreateWithoutStatusInput[] | Prisma.TodoItemUncheckedCreateWithoutStatusInput[]
-  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutStatusInput | Prisma.TodoItemCreateOrConnectWithoutStatusInput[]
-  createMany?: Prisma.TodoItemCreateManyStatusInputEnvelope
+export type TodoItemUncheckedCreateNestedManyWithoutCategoriesInput = {
+  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutCategoriesInput, Prisma.TodoItemUncheckedCreateWithoutCategoriesInput> | Prisma.TodoItemCreateWithoutCategoriesInput[] | Prisma.TodoItemUncheckedCreateWithoutCategoriesInput[]
+  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutCategoriesInput | Prisma.TodoItemCreateOrConnectWithoutCategoriesInput[]
+  createMany?: Prisma.TodoItemCreateManyCategoriesInputEnvelope
   connect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
 }
 
-export type TodoItemUpdateManyWithoutStatusNestedInput = {
-  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutStatusInput, Prisma.TodoItemUncheckedCreateWithoutStatusInput> | Prisma.TodoItemCreateWithoutStatusInput[] | Prisma.TodoItemUncheckedCreateWithoutStatusInput[]
-  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutStatusInput | Prisma.TodoItemCreateOrConnectWithoutStatusInput[]
-  upsert?: Prisma.TodoItemUpsertWithWhereUniqueWithoutStatusInput | Prisma.TodoItemUpsertWithWhereUniqueWithoutStatusInput[]
-  createMany?: Prisma.TodoItemCreateManyStatusInputEnvelope
+export type TodoItemUpdateManyWithoutCategoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutCategoriesInput, Prisma.TodoItemUncheckedCreateWithoutCategoriesInput> | Prisma.TodoItemCreateWithoutCategoriesInput[] | Prisma.TodoItemUncheckedCreateWithoutCategoriesInput[]
+  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutCategoriesInput | Prisma.TodoItemCreateOrConnectWithoutCategoriesInput[]
+  upsert?: Prisma.TodoItemUpsertWithWhereUniqueWithoutCategoriesInput | Prisma.TodoItemUpsertWithWhereUniqueWithoutCategoriesInput[]
+  createMany?: Prisma.TodoItemCreateManyCategoriesInputEnvelope
   set?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
   disconnect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
   delete?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
   connect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
-  update?: Prisma.TodoItemUpdateWithWhereUniqueWithoutStatusInput | Prisma.TodoItemUpdateWithWhereUniqueWithoutStatusInput[]
-  updateMany?: Prisma.TodoItemUpdateManyWithWhereWithoutStatusInput | Prisma.TodoItemUpdateManyWithWhereWithoutStatusInput[]
+  update?: Prisma.TodoItemUpdateWithWhereUniqueWithoutCategoriesInput | Prisma.TodoItemUpdateWithWhereUniqueWithoutCategoriesInput[]
+  updateMany?: Prisma.TodoItemUpdateManyWithWhereWithoutCategoriesInput | Prisma.TodoItemUpdateManyWithWhereWithoutCategoriesInput[]
   deleteMany?: Prisma.TodoItemScalarWhereInput | Prisma.TodoItemScalarWhereInput[]
 }
 
-export type TodoItemUncheckedUpdateManyWithoutStatusNestedInput = {
-  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutStatusInput, Prisma.TodoItemUncheckedCreateWithoutStatusInput> | Prisma.TodoItemCreateWithoutStatusInput[] | Prisma.TodoItemUncheckedCreateWithoutStatusInput[]
-  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutStatusInput | Prisma.TodoItemCreateOrConnectWithoutStatusInput[]
-  upsert?: Prisma.TodoItemUpsertWithWhereUniqueWithoutStatusInput | Prisma.TodoItemUpsertWithWhereUniqueWithoutStatusInput[]
-  createMany?: Prisma.TodoItemCreateManyStatusInputEnvelope
+export type TodoItemUncheckedUpdateManyWithoutCategoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutCategoriesInput, Prisma.TodoItemUncheckedCreateWithoutCategoriesInput> | Prisma.TodoItemCreateWithoutCategoriesInput[] | Prisma.TodoItemUncheckedCreateWithoutCategoriesInput[]
+  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutCategoriesInput | Prisma.TodoItemCreateOrConnectWithoutCategoriesInput[]
+  upsert?: Prisma.TodoItemUpsertWithWhereUniqueWithoutCategoriesInput | Prisma.TodoItemUpsertWithWhereUniqueWithoutCategoriesInput[]
+  createMany?: Prisma.TodoItemCreateManyCategoriesInputEnvelope
   set?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
   disconnect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
   delete?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
   connect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
-  update?: Prisma.TodoItemUpdateWithWhereUniqueWithoutStatusInput | Prisma.TodoItemUpdateWithWhereUniqueWithoutStatusInput[]
-  updateMany?: Prisma.TodoItemUpdateManyWithWhereWithoutStatusInput | Prisma.TodoItemUpdateManyWithWhereWithoutStatusInput[]
+  update?: Prisma.TodoItemUpdateWithWhereUniqueWithoutCategoriesInput | Prisma.TodoItemUpdateWithWhereUniqueWithoutCategoriesInput[]
+  updateMany?: Prisma.TodoItemUpdateManyWithWhereWithoutCategoriesInput | Prisma.TodoItemUpdateManyWithWhereWithoutCategoriesInput[]
   deleteMany?: Prisma.TodoItemScalarWhereInput | Prisma.TodoItemScalarWhereInput[]
 }
 
-export type TodoItemCreateNestedManyWithoutCategorizeInput = {
-  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutCategorizeInput, Prisma.TodoItemUncheckedCreateWithoutCategorizeInput> | Prisma.TodoItemCreateWithoutCategorizeInput[] | Prisma.TodoItemUncheckedCreateWithoutCategorizeInput[]
-  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutCategorizeInput | Prisma.TodoItemCreateOrConnectWithoutCategorizeInput[]
-  createMany?: Prisma.TodoItemCreateManyCategorizeInputEnvelope
+export type TodoItemCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutCreatedByInput, Prisma.TodoItemUncheckedCreateWithoutCreatedByInput> | Prisma.TodoItemCreateWithoutCreatedByInput[] | Prisma.TodoItemUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutCreatedByInput | Prisma.TodoItemCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.TodoItemCreateManyCreatedByInputEnvelope
   connect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
 }
 
-export type TodoItemUncheckedCreateNestedManyWithoutCategorizeInput = {
-  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutCategorizeInput, Prisma.TodoItemUncheckedCreateWithoutCategorizeInput> | Prisma.TodoItemCreateWithoutCategorizeInput[] | Prisma.TodoItemUncheckedCreateWithoutCategorizeInput[]
-  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutCategorizeInput | Prisma.TodoItemCreateOrConnectWithoutCategorizeInput[]
-  createMany?: Prisma.TodoItemCreateManyCategorizeInputEnvelope
+export type TodoItemCreateNestedManyWithoutAssignedToInput = {
+  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutAssignedToInput, Prisma.TodoItemUncheckedCreateWithoutAssignedToInput> | Prisma.TodoItemCreateWithoutAssignedToInput[] | Prisma.TodoItemUncheckedCreateWithoutAssignedToInput[]
+  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutAssignedToInput | Prisma.TodoItemCreateOrConnectWithoutAssignedToInput[]
+  createMany?: Prisma.TodoItemCreateManyAssignedToInputEnvelope
   connect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
 }
 
-export type TodoItemUpdateManyWithoutCategorizeNestedInput = {
-  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutCategorizeInput, Prisma.TodoItemUncheckedCreateWithoutCategorizeInput> | Prisma.TodoItemCreateWithoutCategorizeInput[] | Prisma.TodoItemUncheckedCreateWithoutCategorizeInput[]
-  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutCategorizeInput | Prisma.TodoItemCreateOrConnectWithoutCategorizeInput[]
-  upsert?: Prisma.TodoItemUpsertWithWhereUniqueWithoutCategorizeInput | Prisma.TodoItemUpsertWithWhereUniqueWithoutCategorizeInput[]
-  createMany?: Prisma.TodoItemCreateManyCategorizeInputEnvelope
+export type TodoItemUncheckedCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutCreatedByInput, Prisma.TodoItemUncheckedCreateWithoutCreatedByInput> | Prisma.TodoItemCreateWithoutCreatedByInput[] | Prisma.TodoItemUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutCreatedByInput | Prisma.TodoItemCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.TodoItemCreateManyCreatedByInputEnvelope
+  connect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
+}
+
+export type TodoItemUncheckedCreateNestedManyWithoutAssignedToInput = {
+  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutAssignedToInput, Prisma.TodoItemUncheckedCreateWithoutAssignedToInput> | Prisma.TodoItemCreateWithoutAssignedToInput[] | Prisma.TodoItemUncheckedCreateWithoutAssignedToInput[]
+  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutAssignedToInput | Prisma.TodoItemCreateOrConnectWithoutAssignedToInput[]
+  createMany?: Prisma.TodoItemCreateManyAssignedToInputEnvelope
+  connect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
+}
+
+export type TodoItemUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutCreatedByInput, Prisma.TodoItemUncheckedCreateWithoutCreatedByInput> | Prisma.TodoItemCreateWithoutCreatedByInput[] | Prisma.TodoItemUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutCreatedByInput | Prisma.TodoItemCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.TodoItemUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.TodoItemUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.TodoItemCreateManyCreatedByInputEnvelope
   set?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
   disconnect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
   delete?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
   connect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
-  update?: Prisma.TodoItemUpdateWithWhereUniqueWithoutCategorizeInput | Prisma.TodoItemUpdateWithWhereUniqueWithoutCategorizeInput[]
-  updateMany?: Prisma.TodoItemUpdateManyWithWhereWithoutCategorizeInput | Prisma.TodoItemUpdateManyWithWhereWithoutCategorizeInput[]
+  update?: Prisma.TodoItemUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.TodoItemUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.TodoItemUpdateManyWithWhereWithoutCreatedByInput | Prisma.TodoItemUpdateManyWithWhereWithoutCreatedByInput[]
   deleteMany?: Prisma.TodoItemScalarWhereInput | Prisma.TodoItemScalarWhereInput[]
 }
 
-export type TodoItemUncheckedUpdateManyWithoutCategorizeNestedInput = {
-  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutCategorizeInput, Prisma.TodoItemUncheckedCreateWithoutCategorizeInput> | Prisma.TodoItemCreateWithoutCategorizeInput[] | Prisma.TodoItemUncheckedCreateWithoutCategorizeInput[]
-  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutCategorizeInput | Prisma.TodoItemCreateOrConnectWithoutCategorizeInput[]
-  upsert?: Prisma.TodoItemUpsertWithWhereUniqueWithoutCategorizeInput | Prisma.TodoItemUpsertWithWhereUniqueWithoutCategorizeInput[]
-  createMany?: Prisma.TodoItemCreateManyCategorizeInputEnvelope
+export type TodoItemUpdateManyWithoutAssignedToNestedInput = {
+  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutAssignedToInput, Prisma.TodoItemUncheckedCreateWithoutAssignedToInput> | Prisma.TodoItemCreateWithoutAssignedToInput[] | Prisma.TodoItemUncheckedCreateWithoutAssignedToInput[]
+  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutAssignedToInput | Prisma.TodoItemCreateOrConnectWithoutAssignedToInput[]
+  upsert?: Prisma.TodoItemUpsertWithWhereUniqueWithoutAssignedToInput | Prisma.TodoItemUpsertWithWhereUniqueWithoutAssignedToInput[]
+  createMany?: Prisma.TodoItemCreateManyAssignedToInputEnvelope
   set?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
   disconnect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
   delete?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
   connect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
-  update?: Prisma.TodoItemUpdateWithWhereUniqueWithoutCategorizeInput | Prisma.TodoItemUpdateWithWhereUniqueWithoutCategorizeInput[]
-  updateMany?: Prisma.TodoItemUpdateManyWithWhereWithoutCategorizeInput | Prisma.TodoItemUpdateManyWithWhereWithoutCategorizeInput[]
+  update?: Prisma.TodoItemUpdateWithWhereUniqueWithoutAssignedToInput | Prisma.TodoItemUpdateWithWhereUniqueWithoutAssignedToInput[]
+  updateMany?: Prisma.TodoItemUpdateManyWithWhereWithoutAssignedToInput | Prisma.TodoItemUpdateManyWithWhereWithoutAssignedToInput[]
   deleteMany?: Prisma.TodoItemScalarWhereInput | Prisma.TodoItemScalarWhereInput[]
 }
 
-export type TodoItemCreateWithoutStatusInput = {
+export type TodoItemUncheckedUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutCreatedByInput, Prisma.TodoItemUncheckedCreateWithoutCreatedByInput> | Prisma.TodoItemCreateWithoutCreatedByInput[] | Prisma.TodoItemUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutCreatedByInput | Prisma.TodoItemCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.TodoItemUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.TodoItemUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.TodoItemCreateManyCreatedByInputEnvelope
+  set?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
+  disconnect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
+  delete?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
+  connect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
+  update?: Prisma.TodoItemUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.TodoItemUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.TodoItemUpdateManyWithWhereWithoutCreatedByInput | Prisma.TodoItemUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.TodoItemScalarWhereInput | Prisma.TodoItemScalarWhereInput[]
+}
+
+export type TodoItemUncheckedUpdateManyWithoutAssignedToNestedInput = {
+  create?: Prisma.XOR<Prisma.TodoItemCreateWithoutAssignedToInput, Prisma.TodoItemUncheckedCreateWithoutAssignedToInput> | Prisma.TodoItemCreateWithoutAssignedToInput[] | Prisma.TodoItemUncheckedCreateWithoutAssignedToInput[]
+  connectOrCreate?: Prisma.TodoItemCreateOrConnectWithoutAssignedToInput | Prisma.TodoItemCreateOrConnectWithoutAssignedToInput[]
+  upsert?: Prisma.TodoItemUpsertWithWhereUniqueWithoutAssignedToInput | Prisma.TodoItemUpsertWithWhereUniqueWithoutAssignedToInput[]
+  createMany?: Prisma.TodoItemCreateManyAssignedToInputEnvelope
+  set?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
+  disconnect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
+  delete?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
+  connect?: Prisma.TodoItemWhereUniqueInput | Prisma.TodoItemWhereUniqueInput[]
+  update?: Prisma.TodoItemUpdateWithWhereUniqueWithoutAssignedToInput | Prisma.TodoItemUpdateWithWhereUniqueWithoutAssignedToInput[]
+  updateMany?: Prisma.TodoItemUpdateManyWithWhereWithoutAssignedToInput | Prisma.TodoItemUpdateManyWithWhereWithoutAssignedToInput[]
+  deleteMany?: Prisma.TodoItemScalarWhereInput | Prisma.TodoItemScalarWhereInput[]
+}
+
+export type TodoItemCreateWithoutCategoriesInput = {
   title: string
   description?: string | null
+  status: number
   createdAt?: Date | string
   dueDate?: Date | string | null
-  categorize: Prisma.CategorizeCreateNestedOneWithoutTodoItemsInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedTodosInput
+  assignedTo?: Prisma.UserCreateNestedOneWithoutAssignedTodosInput
 }
 
-export type TodoItemUncheckedCreateWithoutStatusInput = {
+export type TodoItemUncheckedCreateWithoutCategoriesInput = {
   id?: number
   title: string
   description?: string | null
-  categorizeId: number
+  status: number
   createdAt?: Date | string
   dueDate?: Date | string | null
+  createdByID?: number | null
+  assignedToID?: number | null
 }
 
-export type TodoItemCreateOrConnectWithoutStatusInput = {
+export type TodoItemCreateOrConnectWithoutCategoriesInput = {
   where: Prisma.TodoItemWhereUniqueInput
-  create: Prisma.XOR<Prisma.TodoItemCreateWithoutStatusInput, Prisma.TodoItemUncheckedCreateWithoutStatusInput>
+  create: Prisma.XOR<Prisma.TodoItemCreateWithoutCategoriesInput, Prisma.TodoItemUncheckedCreateWithoutCategoriesInput>
 }
 
-export type TodoItemCreateManyStatusInputEnvelope = {
-  data: Prisma.TodoItemCreateManyStatusInput | Prisma.TodoItemCreateManyStatusInput[]
+export type TodoItemCreateManyCategoriesInputEnvelope = {
+  data: Prisma.TodoItemCreateManyCategoriesInput | Prisma.TodoItemCreateManyCategoriesInput[]
 }
 
-export type TodoItemUpsertWithWhereUniqueWithoutStatusInput = {
+export type TodoItemUpsertWithWhereUniqueWithoutCategoriesInput = {
   where: Prisma.TodoItemWhereUniqueInput
-  update: Prisma.XOR<Prisma.TodoItemUpdateWithoutStatusInput, Prisma.TodoItemUncheckedUpdateWithoutStatusInput>
-  create: Prisma.XOR<Prisma.TodoItemCreateWithoutStatusInput, Prisma.TodoItemUncheckedCreateWithoutStatusInput>
+  update: Prisma.XOR<Prisma.TodoItemUpdateWithoutCategoriesInput, Prisma.TodoItemUncheckedUpdateWithoutCategoriesInput>
+  create: Prisma.XOR<Prisma.TodoItemCreateWithoutCategoriesInput, Prisma.TodoItemUncheckedCreateWithoutCategoriesInput>
 }
 
-export type TodoItemUpdateWithWhereUniqueWithoutStatusInput = {
+export type TodoItemUpdateWithWhereUniqueWithoutCategoriesInput = {
   where: Prisma.TodoItemWhereUniqueInput
-  data: Prisma.XOR<Prisma.TodoItemUpdateWithoutStatusInput, Prisma.TodoItemUncheckedUpdateWithoutStatusInput>
+  data: Prisma.XOR<Prisma.TodoItemUpdateWithoutCategoriesInput, Prisma.TodoItemUncheckedUpdateWithoutCategoriesInput>
 }
 
-export type TodoItemUpdateManyWithWhereWithoutStatusInput = {
+export type TodoItemUpdateManyWithWhereWithoutCategoriesInput = {
   where: Prisma.TodoItemScalarWhereInput
-  data: Prisma.XOR<Prisma.TodoItemUpdateManyMutationInput, Prisma.TodoItemUncheckedUpdateManyWithoutStatusInput>
+  data: Prisma.XOR<Prisma.TodoItemUpdateManyMutationInput, Prisma.TodoItemUncheckedUpdateManyWithoutCategoriesInput>
 }
 
 export type TodoItemScalarWhereInput = {
@@ -573,122 +685,233 @@ export type TodoItemScalarWhereInput = {
   id?: Prisma.IntFilter<"TodoItem"> | number
   title?: Prisma.StringFilter<"TodoItem"> | string
   description?: Prisma.StringNullableFilter<"TodoItem"> | string | null
-  statusId?: Prisma.IntFilter<"TodoItem"> | number
-  categorizeId?: Prisma.IntFilter<"TodoItem"> | number
+  status?: Prisma.IntFilter<"TodoItem"> | number
   createdAt?: Prisma.DateTimeFilter<"TodoItem"> | Date | string
   dueDate?: Prisma.DateTimeNullableFilter<"TodoItem"> | Date | string | null
+  createdByID?: Prisma.IntNullableFilter<"TodoItem"> | number | null
+  assignedToID?: Prisma.IntNullableFilter<"TodoItem"> | number | null
+  categoriesID?: Prisma.IntNullableFilter<"TodoItem"> | number | null
 }
 
-export type TodoItemCreateWithoutCategorizeInput = {
+export type TodoItemCreateWithoutCreatedByInput = {
   title: string
   description?: string | null
+  status: number
   createdAt?: Date | string
   dueDate?: Date | string | null
-  status: Prisma.StatusCreateNestedOneWithoutTodoItemsInput
+  assignedTo?: Prisma.UserCreateNestedOneWithoutAssignedTodosInput
+  categories?: Prisma.CategoriesCreateNestedOneWithoutTodoItemsInput
 }
 
-export type TodoItemUncheckedCreateWithoutCategorizeInput = {
+export type TodoItemUncheckedCreateWithoutCreatedByInput = {
   id?: number
   title: string
   description?: string | null
-  statusId: number
+  status: number
   createdAt?: Date | string
   dueDate?: Date | string | null
+  assignedToID?: number | null
+  categoriesID?: number | null
 }
 
-export type TodoItemCreateOrConnectWithoutCategorizeInput = {
+export type TodoItemCreateOrConnectWithoutCreatedByInput = {
   where: Prisma.TodoItemWhereUniqueInput
-  create: Prisma.XOR<Prisma.TodoItemCreateWithoutCategorizeInput, Prisma.TodoItemUncheckedCreateWithoutCategorizeInput>
+  create: Prisma.XOR<Prisma.TodoItemCreateWithoutCreatedByInput, Prisma.TodoItemUncheckedCreateWithoutCreatedByInput>
 }
 
-export type TodoItemCreateManyCategorizeInputEnvelope = {
-  data: Prisma.TodoItemCreateManyCategorizeInput | Prisma.TodoItemCreateManyCategorizeInput[]
+export type TodoItemCreateManyCreatedByInputEnvelope = {
+  data: Prisma.TodoItemCreateManyCreatedByInput | Prisma.TodoItemCreateManyCreatedByInput[]
 }
 
-export type TodoItemUpsertWithWhereUniqueWithoutCategorizeInput = {
+export type TodoItemCreateWithoutAssignedToInput = {
+  title: string
+  description?: string | null
+  status: number
+  createdAt?: Date | string
+  dueDate?: Date | string | null
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedTodosInput
+  categories?: Prisma.CategoriesCreateNestedOneWithoutTodoItemsInput
+}
+
+export type TodoItemUncheckedCreateWithoutAssignedToInput = {
+  id?: number
+  title: string
+  description?: string | null
+  status: number
+  createdAt?: Date | string
+  dueDate?: Date | string | null
+  createdByID?: number | null
+  categoriesID?: number | null
+}
+
+export type TodoItemCreateOrConnectWithoutAssignedToInput = {
   where: Prisma.TodoItemWhereUniqueInput
-  update: Prisma.XOR<Prisma.TodoItemUpdateWithoutCategorizeInput, Prisma.TodoItemUncheckedUpdateWithoutCategorizeInput>
-  create: Prisma.XOR<Prisma.TodoItemCreateWithoutCategorizeInput, Prisma.TodoItemUncheckedCreateWithoutCategorizeInput>
+  create: Prisma.XOR<Prisma.TodoItemCreateWithoutAssignedToInput, Prisma.TodoItemUncheckedCreateWithoutAssignedToInput>
 }
 
-export type TodoItemUpdateWithWhereUniqueWithoutCategorizeInput = {
+export type TodoItemCreateManyAssignedToInputEnvelope = {
+  data: Prisma.TodoItemCreateManyAssignedToInput | Prisma.TodoItemCreateManyAssignedToInput[]
+}
+
+export type TodoItemUpsertWithWhereUniqueWithoutCreatedByInput = {
   where: Prisma.TodoItemWhereUniqueInput
-  data: Prisma.XOR<Prisma.TodoItemUpdateWithoutCategorizeInput, Prisma.TodoItemUncheckedUpdateWithoutCategorizeInput>
+  update: Prisma.XOR<Prisma.TodoItemUpdateWithoutCreatedByInput, Prisma.TodoItemUncheckedUpdateWithoutCreatedByInput>
+  create: Prisma.XOR<Prisma.TodoItemCreateWithoutCreatedByInput, Prisma.TodoItemUncheckedCreateWithoutCreatedByInput>
 }
 
-export type TodoItemUpdateManyWithWhereWithoutCategorizeInput = {
+export type TodoItemUpdateWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.TodoItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.TodoItemUpdateWithoutCreatedByInput, Prisma.TodoItemUncheckedUpdateWithoutCreatedByInput>
+}
+
+export type TodoItemUpdateManyWithWhereWithoutCreatedByInput = {
   where: Prisma.TodoItemScalarWhereInput
-  data: Prisma.XOR<Prisma.TodoItemUpdateManyMutationInput, Prisma.TodoItemUncheckedUpdateManyWithoutCategorizeInput>
+  data: Prisma.XOR<Prisma.TodoItemUpdateManyMutationInput, Prisma.TodoItemUncheckedUpdateManyWithoutCreatedByInput>
 }
 
-export type TodoItemCreateManyStatusInput = {
+export type TodoItemUpsertWithWhereUniqueWithoutAssignedToInput = {
+  where: Prisma.TodoItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.TodoItemUpdateWithoutAssignedToInput, Prisma.TodoItemUncheckedUpdateWithoutAssignedToInput>
+  create: Prisma.XOR<Prisma.TodoItemCreateWithoutAssignedToInput, Prisma.TodoItemUncheckedCreateWithoutAssignedToInput>
+}
+
+export type TodoItemUpdateWithWhereUniqueWithoutAssignedToInput = {
+  where: Prisma.TodoItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.TodoItemUpdateWithoutAssignedToInput, Prisma.TodoItemUncheckedUpdateWithoutAssignedToInput>
+}
+
+export type TodoItemUpdateManyWithWhereWithoutAssignedToInput = {
+  where: Prisma.TodoItemScalarWhereInput
+  data: Prisma.XOR<Prisma.TodoItemUpdateManyMutationInput, Prisma.TodoItemUncheckedUpdateManyWithoutAssignedToInput>
+}
+
+export type TodoItemCreateManyCategoriesInput = {
   id?: number
   title: string
   description?: string | null
-  categorizeId: number
+  status: number
   createdAt?: Date | string
   dueDate?: Date | string | null
+  createdByID?: number | null
+  assignedToID?: number | null
 }
 
-export type TodoItemUpdateWithoutStatusInput = {
+export type TodoItemUpdateWithoutCategoriesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  categorize?: Prisma.CategorizeUpdateOneRequiredWithoutTodoItemsNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedTodosNestedInput
+  assignedTo?: Prisma.UserUpdateOneWithoutAssignedTodosNestedInput
 }
 
-export type TodoItemUncheckedUpdateWithoutStatusInput = {
+export type TodoItemUncheckedUpdateWithoutCategoriesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categorizeId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  assignedToID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
-export type TodoItemUncheckedUpdateManyWithoutStatusInput = {
+export type TodoItemUncheckedUpdateManyWithoutCategoriesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categorizeId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  assignedToID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
-export type TodoItemCreateManyCategorizeInput = {
+export type TodoItemCreateManyCreatedByInput = {
   id?: number
   title: string
   description?: string | null
-  statusId: number
+  status: number
   createdAt?: Date | string
   dueDate?: Date | string | null
+  assignedToID?: number | null
+  categoriesID?: number | null
 }
 
-export type TodoItemUpdateWithoutCategorizeInput = {
+export type TodoItemCreateManyAssignedToInput = {
+  id?: number
+  title: string
+  description?: string | null
+  status: number
+  createdAt?: Date | string
+  dueDate?: Date | string | null
+  createdByID?: number | null
+  categoriesID?: number | null
+}
+
+export type TodoItemUpdateWithoutCreatedByInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.StatusUpdateOneRequiredWithoutTodoItemsNestedInput
+  assignedTo?: Prisma.UserUpdateOneWithoutAssignedTodosNestedInput
+  categories?: Prisma.CategoriesUpdateOneWithoutTodoItemsNestedInput
 }
 
-export type TodoItemUncheckedUpdateWithoutCategorizeInput = {
+export type TodoItemUncheckedUpdateWithoutCreatedByInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  statusId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignedToID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  categoriesID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
-export type TodoItemUncheckedUpdateManyWithoutCategorizeInput = {
+export type TodoItemUncheckedUpdateManyWithoutCreatedByInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  statusId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignedToID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  categoriesID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type TodoItemUpdateWithoutAssignedToInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedTodosNestedInput
+  categories?: Prisma.CategoriesUpdateOneWithoutTodoItemsNestedInput
+}
+
+export type TodoItemUncheckedUpdateWithoutAssignedToInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  categoriesID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type TodoItemUncheckedUpdateManyWithoutAssignedToInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdByID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  categoriesID?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -697,76 +920,93 @@ export type TodoItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   title?: boolean
   description?: boolean
-  statusId?: boolean
-  categorizeId?: boolean
+  status?: boolean
   createdAt?: boolean
   dueDate?: boolean
-  status?: boolean | Prisma.StatusDefaultArgs<ExtArgs>
-  categorize?: boolean | Prisma.CategorizeDefaultArgs<ExtArgs>
+  createdByID?: boolean
+  assignedToID?: boolean
+  categoriesID?: boolean
+  createdBy?: boolean | Prisma.TodoItem$createdByArgs<ExtArgs>
+  assignedTo?: boolean | Prisma.TodoItem$assignedToArgs<ExtArgs>
+  categories?: boolean | Prisma.TodoItem$categoriesArgs<ExtArgs>
 }, ExtArgs["result"]["todoItem"]>
 
 export type TodoItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   description?: boolean
-  statusId?: boolean
-  categorizeId?: boolean
+  status?: boolean
   createdAt?: boolean
   dueDate?: boolean
-  status?: boolean | Prisma.StatusDefaultArgs<ExtArgs>
-  categorize?: boolean | Prisma.CategorizeDefaultArgs<ExtArgs>
+  createdByID?: boolean
+  assignedToID?: boolean
+  categoriesID?: boolean
+  createdBy?: boolean | Prisma.TodoItem$createdByArgs<ExtArgs>
+  assignedTo?: boolean | Prisma.TodoItem$assignedToArgs<ExtArgs>
+  categories?: boolean | Prisma.TodoItem$categoriesArgs<ExtArgs>
 }, ExtArgs["result"]["todoItem"]>
 
 export type TodoItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   description?: boolean
-  statusId?: boolean
-  categorizeId?: boolean
+  status?: boolean
   createdAt?: boolean
   dueDate?: boolean
-  status?: boolean | Prisma.StatusDefaultArgs<ExtArgs>
-  categorize?: boolean | Prisma.CategorizeDefaultArgs<ExtArgs>
+  createdByID?: boolean
+  assignedToID?: boolean
+  categoriesID?: boolean
+  createdBy?: boolean | Prisma.TodoItem$createdByArgs<ExtArgs>
+  assignedTo?: boolean | Prisma.TodoItem$assignedToArgs<ExtArgs>
+  categories?: boolean | Prisma.TodoItem$categoriesArgs<ExtArgs>
 }, ExtArgs["result"]["todoItem"]>
 
 export type TodoItemSelectScalar = {
   id?: boolean
   title?: boolean
   description?: boolean
-  statusId?: boolean
-  categorizeId?: boolean
+  status?: boolean
   createdAt?: boolean
   dueDate?: boolean
+  createdByID?: boolean
+  assignedToID?: boolean
+  categoriesID?: boolean
 }
 
-export type TodoItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "statusId" | "categorizeId" | "createdAt" | "dueDate", ExtArgs["result"]["todoItem"]>
+export type TodoItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "status" | "createdAt" | "dueDate" | "createdByID" | "assignedToID" | "categoriesID", ExtArgs["result"]["todoItem"]>
 export type TodoItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  status?: boolean | Prisma.StatusDefaultArgs<ExtArgs>
-  categorize?: boolean | Prisma.CategorizeDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.TodoItem$createdByArgs<ExtArgs>
+  assignedTo?: boolean | Prisma.TodoItem$assignedToArgs<ExtArgs>
+  categories?: boolean | Prisma.TodoItem$categoriesArgs<ExtArgs>
 }
 export type TodoItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  status?: boolean | Prisma.StatusDefaultArgs<ExtArgs>
-  categorize?: boolean | Prisma.CategorizeDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.TodoItem$createdByArgs<ExtArgs>
+  assignedTo?: boolean | Prisma.TodoItem$assignedToArgs<ExtArgs>
+  categories?: boolean | Prisma.TodoItem$categoriesArgs<ExtArgs>
 }
 export type TodoItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  status?: boolean | Prisma.StatusDefaultArgs<ExtArgs>
-  categorize?: boolean | Prisma.CategorizeDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.TodoItem$createdByArgs<ExtArgs>
+  assignedTo?: boolean | Prisma.TodoItem$assignedToArgs<ExtArgs>
+  categories?: boolean | Prisma.TodoItem$categoriesArgs<ExtArgs>
 }
 
 export type $TodoItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "TodoItem"
   objects: {
-    status: Prisma.$StatusPayload<ExtArgs>
-    categorize: Prisma.$CategorizePayload<ExtArgs>
+    createdBy: Prisma.$UserPayload<ExtArgs> | null
+    assignedTo: Prisma.$UserPayload<ExtArgs> | null
+    categories: Prisma.$CategoriesPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     title: string
     description: string | null
-    statusId: number
-    categorizeId: number
+    status: number
     createdAt: Date
     dueDate: Date | null
+    createdByID: number | null
+    assignedToID: number | null
+    categoriesID: number | null
   }, ExtArgs["result"]["todoItem"]>
   composites: {}
 }
@@ -1161,8 +1401,9 @@ readonly fields: TodoItemFieldRefs;
  */
 export interface Prisma__TodoItemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  status<T extends Prisma.StatusDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StatusDefaultArgs<ExtArgs>>): Prisma.Prisma__StatusClient<runtime.Types.Result.GetResult<Prisma.$StatusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  categorize<T extends Prisma.CategorizeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CategorizeDefaultArgs<ExtArgs>>): Prisma.Prisma__CategorizeClient<runtime.Types.Result.GetResult<Prisma.$CategorizePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  createdBy<T extends Prisma.TodoItem$createdByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TodoItem$createdByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  assignedTo<T extends Prisma.TodoItem$assignedToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TodoItem$assignedToArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  categories<T extends Prisma.TodoItem$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TodoItem$categoriesArgs<ExtArgs>>): Prisma.Prisma__CategoriesClient<runtime.Types.Result.GetResult<Prisma.$CategoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1195,10 +1436,12 @@ export interface TodoItemFieldRefs {
   readonly id: Prisma.FieldRef<"TodoItem", 'Int'>
   readonly title: Prisma.FieldRef<"TodoItem", 'String'>
   readonly description: Prisma.FieldRef<"TodoItem", 'String'>
-  readonly statusId: Prisma.FieldRef<"TodoItem", 'Int'>
-  readonly categorizeId: Prisma.FieldRef<"TodoItem", 'Int'>
+  readonly status: Prisma.FieldRef<"TodoItem", 'Int'>
   readonly createdAt: Prisma.FieldRef<"TodoItem", 'DateTime'>
   readonly dueDate: Prisma.FieldRef<"TodoItem", 'DateTime'>
+  readonly createdByID: Prisma.FieldRef<"TodoItem", 'Int'>
+  readonly assignedToID: Prisma.FieldRef<"TodoItem", 'Int'>
+  readonly categoriesID: Prisma.FieldRef<"TodoItem", 'Int'>
 }
     
 
@@ -1595,6 +1838,63 @@ export type TodoItemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many TodoItems to delete.
    */
   limit?: number
+}
+
+/**
+ * TodoItem.createdBy
+ */
+export type TodoItem$createdByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * TodoItem.assignedTo
+ */
+export type TodoItem$assignedToArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * TodoItem.categories
+ */
+export type TodoItem$categoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Categories
+   */
+  select?: Prisma.CategoriesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Categories
+   */
+  omit?: Prisma.CategoriesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoriesInclude<ExtArgs> | null
+  where?: Prisma.CategoriesWhereInput
 }
 
 /**

@@ -13,26 +13,32 @@ datasource db {
 }
 
 model TodoItem {
-  id           Int        @id @default(autoincrement())
+  id           Int          @id @default(autoincrement())
   title        String
   description  String?
-  statusId     Int
-  categorizeId Int
-  createdAt    DateTime   @default(now())
+  status       Int
+  createdAt    DateTime     @default(now())
   dueDate      DateTime?
 
-  status       Status     @relation(fields: [statusId], references: [id])
-  categorize   Categorize @relation(fields: [categorizeId], references: [id])
+  createdByID  Int?
+  assignedToID Int?
+  categoriesID Int?
+
+  createdBy    User?         @relation("createdTodos",fields: [createdByID], references: [id])
+  assignedTo   User?        @relation("assignedTodos",fields: [assignedToID], references: [id])
+  categories   Categories?   @relation(fields: [categoriesID], references: [id])
+
 }
 
-model Status {
-  id        Int        @id @default(autoincrement())
+model Categories {
+  id        Int             @id @default(autoincrement())
   name      String
   todoItems TodoItem[]
 }
 
-model Categorize {
-  id        Int        @id @default(autoincrement())
+model User {
+  id        Int             @id @default(autoincrement())
   name      String
-  todoItems TodoItem[]
+  createdTodos  TodoItem[] @relation("createdTodos")
+  assignedTodos TodoItem[] @relation("assignedTodos")
 }

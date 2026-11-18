@@ -47,12 +47,12 @@ export { Prisma }
  */
 export type TodoItem = Prisma.TodoItemModel
 /**
- * Model Status
+ * Model Categories
  * 
  */
-export type Status = Prisma.StatusModel
+export type Categories = Prisma.CategoriesModel
 /**
- * Model Categorize
+ * Model User
  * 
  */
-export type Categorize = Prisma.CategorizeModel
+export type User = Prisma.UserModel

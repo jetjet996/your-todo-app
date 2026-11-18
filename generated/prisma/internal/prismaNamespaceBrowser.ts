@@ -52,8 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   TodoItem: 'TodoItem',
-  Status: 'Status',
-  Categorize: 'Categorize'
+  Categories: 'Categories',
+  User: 'User'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -73,29 +73,31 @@ export const TodoItemScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
-  statusId: 'statusId',
-  categorizeId: 'categorizeId',
+  status: 'status',
   createdAt: 'createdAt',
-  dueDate: 'dueDate'
+  dueDate: 'dueDate',
+  createdByID: 'createdByID',
+  assignedToID: 'assignedToID',
+  categoriesID: 'categoriesID'
 } as const
 
 export type TodoItemScalarFieldEnum = (typeof TodoItemScalarFieldEnum)[keyof typeof TodoItemScalarFieldEnum]
 
 
-export const StatusScalarFieldEnum = {
+export const CategoriesScalarFieldEnum = {
   id: 'id',
   name: 'name'
 } as const
 
-export type StatusScalarFieldEnum = (typeof StatusScalarFieldEnum)[keyof typeof StatusScalarFieldEnum]
+export type CategoriesScalarFieldEnum = (typeof CategoriesScalarFieldEnum)[keyof typeof CategoriesScalarFieldEnum]
 
 
-export const CategorizeScalarFieldEnum = {
+export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name'
 } as const
 
-export type CategorizeScalarFieldEnum = (typeof CategorizeScalarFieldEnum)[keyof typeof CategorizeScalarFieldEnum]
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
 export const SortOrder = {
