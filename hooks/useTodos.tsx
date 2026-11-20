@@ -4,7 +4,9 @@
 import { useState, useEffect } from "react";
 import * as Actions from "@/app/server/actions";
 import { usePagination } from "@/hooks/usePagination";
-import useFilter from "@/hooks/useFilter";
+import { useFilter } from "@/hooks/useFilter";
+import { useExport } from "@/hooks/useExport";
+
 export interface Todo {
   id: number;
   title: string;
@@ -22,12 +24,12 @@ export interface AssignedUser {
   name: string;
 }
 
-
 export function useTodos() {
   const [todos, setTodos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [AddModal, setAddModal] = useState(false);
   const [EditModal, setEditModal] = useState(false);
+  const [importModal, setImportModal] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
   const [user, setUser] = useState<any[]>([]);
   const [selectedUserData, setSelectedUserData] = useState<any>(null);
@@ -39,8 +41,10 @@ export function useTodos() {
 
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const { page, limit, setPage, nextPage, previousPage, changePage, changeLimit } = usePagination(10);
-
+  const pagination = usePagination(10);
+  const filter = useFilter();
+  const exportCSV = useExport();
+  const [refresh, setRefresh] = useState(0);
   async function getCategories() {
 
     try {
@@ -98,17 +102,22 @@ export function useTodos() {
    }*/
 
   async function fetchTodos() {
-    const filter: any = {};
-    filter.page = page;
-    filter.limit = limit;
-    filter.sortBy = sortBy;
-    console.log(filter.sortBy);
-    filter.sortOrder = sortOrder;
-    filter.selectedUser = selectedUser;
+  
+    const filter_data: any = {};
+    filter_data.page = pagination.page;
+    filter_data.limit = pagination.limit;
+    filter_data.sortBy = sortBy;
+    filter_data.sortOrder = sortOrder;
+    filter_data.assignedToID = filter.selectedUser;
+    filter_data.categoriesID = filter.selectedCategory;
+    filter_data.description = filter.searchInput;
+    filter_data.status = filter.selectedStatus;
+ 
     try {
-      const response = await Actions.getTodolist(filter);
+      const response = await Actions.getTodolist(filter_data);
       setTotalPages(response.totalPages);
       setTodos(response.data);
+
     } catch (error) {
       console.error("Failed to fetch todos:", error);
     } finally {
@@ -120,7 +129,7 @@ export function useTodos() {
     getUser();
     getCategories();
     fetchTodos();
-  }, [page, limit, sortBy, sortOrder]);
+  }, [pagination.page, pagination.limit, sortBy, sortOrder, refresh]);
 
   // Add todo
   /* async function addTodoApi(value: string) {
@@ -141,9 +150,7 @@ export function useTodos() {
     const formData = new FormData(form);
 
     try {
-      console.log("Form Data:", Object.fromEntries(formData.entries()));
       const check_error = validateForm(Object.fromEntries(formData.entries()));
-      console.log(Object.keys(check_error).length);
       if (Object.keys(check_error).length === 0) {
         const response = await Actions.submitTodoForm(formData);
         if (response.success) {
@@ -151,7 +158,7 @@ export function useTodos() {
           alert("Todo added successfully!");
           return response;
         } else {
-          console.log(response);
+
           alert("Failed to add Todo!");
           return response;
         }
@@ -166,8 +173,6 @@ export function useTodos() {
   }
 
   function validateForm(data: any) {
-    console.log("ll");
-    console.log(data);
     const errors: Record<string, string> = {};
     if (!data.title || data.title.trim() == "") {
       errors.title = "Title is required";
@@ -190,7 +195,6 @@ export function useTodos() {
     }
 
     setErrors(errors);
-    console.log(errors);
     return (errors);
   }
 
@@ -204,7 +208,7 @@ export function useTodos() {
 
     if (response.success) {
       alert("Todo deleted successfully!");
-      if(EditModal){
+      if (EditModal) {
         setEditModal(false);
       }
     } else {
@@ -238,6 +242,11 @@ export function useTodos() {
       getUser(),
     ]);
     setAddModal(true);
+
+  }
+
+  async function showImportModal() {
+    setImportModal(true);
 
   }
 
@@ -278,10 +287,32 @@ export function useTodos() {
       setSortBy(null);
       setSortOrder("desc");
     }
-    setPage(1);
-    console.log(sortBy);
+    pagination.setPage(1);
   }
 
+  function resetFilter() {
+
+    filter.reset(),
+      pagination.setPage(1),
+      setRefresh(prev => prev + 1);
+
+  };
+  async function ExportToCSV() {
+    const filter_data: any = {};
+    filter_data.sortBy = sortBy;
+    filter_data.sortOrder = sortOrder;
+    filter_data.assignedToID = filter.selectedUser;
+    filter_data.categoriesID = filter.selectedCategory;
+    filter_data.description = filter.searchInput;
+    filter_data.status = filter.selectedStatus;
+    const response = await Actions.getTodolist(filter_data);
+    if(response.success){
+      exportCSV.export_csv(response.data);
+    }
+    else{
+
+    }
+  }
   return {
     todos,
     loading,
@@ -291,6 +322,7 @@ export function useTodos() {
     categories,
     selectedUserData,
     errors,
+    importModal,
     addTodo,
     updateTodo,
     fetchTodos,
@@ -303,15 +335,15 @@ export function useTodos() {
     //pagination
     total,
     totalPages,
-    page,
-    limit,
-    nextPage,
-    previousPage,
-    changePage,
-    changeLimit,
+    pagination,
     handleSort,
     sortBy,
     sortOrder,
-
+    filter,
+    resetFilter,
+    showImportModal,
+    setImportModal,
+    ExportToCSV,
+    setRefresh,
   };
 }

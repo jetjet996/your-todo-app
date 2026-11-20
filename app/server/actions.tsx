@@ -1,46 +1,53 @@
 "use server"
 import { prisma } from "@/lib/prisma";
+import { Console } from "console";
 
 export interface TodoFilter {
     page?: number;
     limit?: number;
-    search?: string;
-    status?: 1|0;
-    categoryId?: number;
+    description?: string;
+    status?: 1 | 0;
+    categoriesID?: number;
     assignedToID?: number;
     duedate?: string;
     sortBy?: "status" | "createdAt";
     sortOrder?: "asc" | "desc";
+    whereUser?: number;
 }
 export async function getTodolist(filter: TodoFilter) {
     const {
-        page = 1,
-        limit = 10,
-        search,
+        page,
+        limit,
+        description,
         status,
-        categoryId,
+        categoriesID,
         assignedToID,
         duedate,
         sortBy,
         sortOrder,
-    } = filter;
 
-    const skip = (page - 1) * limit;
+
+    } = filter;
+    let skip = 0;
+    if (page && limit) {
+        skip = (page - 1) * limit;
+    }
 
     const where: any = {};
-    if (search && search.trim() !== "") {
+    if (description && description.trim() !== "") {
         where.description = {
-            contains: search.trim(),
+            contains: description.trim(),
         };
     }
-    if (status) {
+
+    if (status !== undefined && status >= 0) {
         where.status = {
             equals: status,
         };
     }
-    if (categoryId && categoryId != 0) {
-        where.categoryId = {
-            equals: categoryId,
+    if (categoriesID && categoriesID != 0) {
+        where.categoriesID = {
+            equals: categoriesID,
         }
     }
     if (assignedToID && assignedToID != 0) {
@@ -48,10 +55,12 @@ export async function getTodolist(filter: TodoFilter) {
             equals: assignedToID,
         }
     }
+
+
     const orderBy = sortBy != null
         ? { [sortBy]: sortOrder }
         : { createdAt: "desc" as const };
-    console.log(orderBy);
+
     try {
         const [response, total] = await Promise.all([prisma.todoItem.findMany({
             where,
@@ -60,14 +69,20 @@ export async function getTodolist(filter: TodoFilter) {
                 assignedTo: true,
             },
             orderBy: orderBy,
-            skip,
-            take: limit,
+            ...(limit ? {
+                skip,
+                take: limit,
+            } : {}),
         }),
         prisma.todoItem.count({
             where,
         }),
         ]);
-        const totalPages = Math.ceil(total / limit);
+        let totalPages = 1
+        if (limit) {
+            totalPages = Math.ceil(total / limit);
+        }
+
 
         if (response) {
             console.log(response);
@@ -235,4 +250,69 @@ export async function deleteTodoItem(id: number) {
         return JSON.parse(JSON.stringify({ error: 'Failed to delete todo', success: false }));
     }
 }
+
+export async function importTodo(importdata: any[]) {
+
+    const userlist = await getUserList();
+    const userMaplist = Object.fromEntries(
+        userlist.data.map((data: any) => [data.name, data.id])
+    );
+    const categorieslist = await getCategoriesList();
+    const categorieslistMaplist = Object.fromEntries(
+        categorieslist.data.map((data: any) => [data.name, data.id])
+    );
+    console.log("adadada", importdata);
+    const updated_data = importdata.map((formData) => {
+
+        const title = formData.Title;
+        const description = formData.Description;
+        const dueDateValue = formData["Due Date"]?.toString();
+        let dueDate: Date | null = null;
+        if (dueDateValue) {
+            const [day, month, year] = dueDateValue.split("/").map(Number);
+            dueDate = new Date(year, month - 1, day);
+        }
+        const status = formData.status == "Completed" ? 1 : 0;
+        const createdAt = new Date();
+        const assignedToID = formData["Assigned To"] ? userMaplist[formData["Assigned To"]] : null;
+        const categoriesID = formData.Categories ? categorieslistMaplist[formData.Categories] : null;
+       
+        return {
+            title: title,
+            description: description,
+            status: status,
+            dueDate: dueDate,
+            createdAt: createdAt,
+            assignedToID: assignedToID,
+            categoriesID: categoriesID,
+        }
+    }
+    );
+    console.log(importdata);
+    try {
+        const response = await prisma.todoItem.createMany({
+            data: updated_data.map((v) => ({
+                title: v.title,
+                description: v.description,
+                status: v.status,
+                dueDate: v.dueDate,
+                createdAt: v.createdAt,
+                assignedToID: v.assignedToID,
+                categoriesID: v.categoriesID,
+            })),
+        });
+        return JSON.parse(JSON.stringify({
+            success: true,
+            data: response,
+        }));
+    } catch (error) {
+        console.error('Failed to delete todo :', error);
+        return JSON.parse(JSON.stringify({ error: 'Failed to import todo', success: false }));
+    }
+
+
+
+}
+
+
 
