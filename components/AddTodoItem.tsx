@@ -41,7 +41,13 @@ export default function AddTodoItem(
           </button>
         </div>
 
-        <form action={addTodo} className="space-y-4">
+        <form onSubmit={async (event) => {
+          const result = await addTodo(event);
+          if (result) {
+            if(result.success)
+              setDueDate(null);
+          }
+        }} className="space-y-4">
 
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
@@ -89,7 +95,7 @@ export default function AddTodoItem(
               wrapperClassName="w-full"
               className="w-full rounded-lg border p-2 text-gray-800"
               name="dueDate"
-              autoComplete="false"
+              autoComplete="off"
             />
             {errors.dueDate && (
               <p className="text-sm text-red-500 mt-1">

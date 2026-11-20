@@ -11,7 +11,7 @@ export default function EditTodoItem(
 
   { todoData }: useTodostype
 ) {
-  const { EditModal, setEditModal, categories, addTodo, user, selectedUserData, updateTodo } = todoData;
+  const { EditModal, setEditModal, categories, addTodo, user, selectedUserData, updateTodo, errors,deleteTodo } = todoData;
 
   if (!EditModal) return null;
   const [id_val, setid] = useState<number>(0);
@@ -72,6 +72,11 @@ export default function EditTodoItem(
               value={title_val}
               onChange={(e) => setTitle(e.target.value)}
             />
+             {errors.title && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.title}
+              </p>
+            )}
           </div>
 
           <div>
@@ -86,6 +91,11 @@ export default function EditTodoItem(
               value={description_val}
               onChange={(e) => setDescription(e.target.value)}
             />
+            {errors.description && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.description}
+              </p>
+            )}
           </div>
 
           <div>
@@ -100,8 +110,13 @@ export default function EditTodoItem(
               wrapperClassName="w-full"
               className="w-full rounded-lg border p-2 text-gray-800"
               name="dueDate"
-              autoComplete="false"
+              autoComplete="off"
             />
+            {errors.dueDate && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.dueDate}
+              </p>
+            )}
           </div>
 
           <div>
@@ -119,6 +134,11 @@ export default function EditTodoItem(
               ))}
 
             </select >
+            {errors.categoriesID && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.categoriesID}
+              </p>
+            )}
           </div>
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
@@ -151,7 +171,7 @@ export default function EditTodoItem(
           <div className="flex justify-end gap-3 pt-3">
             <button
               type="button"
-              onClick={() => setEditModal(false)}
+              onClick={() => deleteTodo(id_val)}
               className="rounded-lg border px-4 py-2 text-red-700"
             >
               delete

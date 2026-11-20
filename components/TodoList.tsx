@@ -3,11 +3,15 @@ import { useTodos } from "@/hooks/useTodos";
 //import { useState } from 'react';
 //import TodoItem from '@/components/TodoItem';
 import AddTodoItem from '@/components/AddTodoItem';
+import Filter from '@/components/filter';
 import EditTodoItem from '@/components/EditTodoItem';
 import { SquarePen, Trash } from 'lucide-react';
 export default function TodoList() {
   const todoData = useTodos()
-  const { todos, showAddModal, AddModal, deleteTodo, EditModal,showEditModal } = todoData
+  const { todos, showAddModal, AddModal, deleteTodo, EditModal, showEditModal, page,
+    limit,total, totalPages,nextPage, previousPage,changePage, changeLimit, 
+    handleSort,sortBy,sortOrder
+  } = todoData
   return (
     <div className="mx-auto mt-10 p-6">
       <div className="flex justify-between items-center mb-4">
@@ -16,19 +20,21 @@ export default function TodoList() {
         </h1>
         <button
           onClick={showAddModal}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="px-6 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 "
         >
           + Add New Todo
         </button>
       </div>
-
+       <Filter
+        todoData={todoData}
+      />
       <table className="w-full text-left bg-white">
         <thead className="bg-gray-100">
           <tr>
             <th className="p-4">#</th>
             <th className="p-4">Status</th>
             <th className="p-4">Task</th>
-            <th className="p-4">Due Date</th>
+            <th className="p-4 cursor-pointer"  onClick={() => handleSort("dueDate")}>Due Date {sortBy !== "dueDate" ? " ↕" : sortOrder === "asc" ? " ↓" : " ↑"}</th>
             <th className="p-4">Description</th>
             <th className="p-4">Category</th>
             <th className="p-4">Assigneeto</th>
@@ -43,7 +49,7 @@ export default function TodoList() {
               const isOverdue = new Date(todo.dueDate) < new Date() ? true : false;
               return (
                 <tr key={index} className="border-t">
-                  <td className="p-4">{todo.id}</td>
+                  <td className="p-4">{index+1}</td>
                   <td className="p-4 ">
                     <span className={`rounded-full px-3 py-1 text-xs font-semibold 
                     ${todo.status
@@ -67,10 +73,10 @@ export default function TodoList() {
                   <td className="p-4">{todo.assignedTo?.name}</td>
                   <td className="p-4">
                     <div className="flex items-center">
-                      <button className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-md m-1" onClick={()=>showEditModal(todo.id)}> 
+                      <button className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-md m-1" onClick={() => showEditModal(todo.id)}>
                         <SquarePen size={18} />
                       </button>
-                      <button className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-md m-1" onClick={()=>deleteTodo(todo.id)}>
+                      <button className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-md m-1" onClick={() => deleteTodo(todo.id)}>
                         <Trash size={18} />
                       </button>
                     </div>
@@ -81,6 +87,51 @@ export default function TodoList() {
             )}
         </tbody>
       </table>
+
+      <div className="flex items-center justify-between mt-4">
+
+        <div className="flex gap-2">
+          <span className="flex justify-center items-center"> showing page by</span>
+          <select
+            className="rounded-lg border p-2 text-gray-800"
+            value={limit}
+            onChange={(e) => changeLimit(Number(e.target.value))}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+
+        </div>
+
+        <div className="flex gap-2">
+
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-600"
+            onClick={previousPage}
+            disabled={page === 1}
+          >
+            Previous
+          </button>
+
+          <span className="flex justify-center items-center">
+            Page {page} of {totalPages}
+          </span>
+
+          <button
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-600"
+            onClick={nextPage}
+            disabled={page >= totalPages}
+          >
+            Next
+          </button>
+
+        </div>
+
+
+
+      </div>
       {AddModal && <AddTodoItem
         todoData={todoData}
       />

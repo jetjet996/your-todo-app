@@ -1,19 +1,80 @@
 "use server"
 import { prisma } from "@/lib/prisma";
 
-export async function getTodolist() {
+export interface TodoFilter {
+    page?: number;
+    limit?: number;
+    search?: string;
+    status?: 1|0;
+    categoryId?: number;
+    assignedToID?: number;
+    duedate?: string;
+    sortBy?: "status" | "createdAt";
+    sortOrder?: "asc" | "desc";
+}
+export async function getTodolist(filter: TodoFilter) {
+    const {
+        page = 1,
+        limit = 10,
+        search,
+        status,
+        categoryId,
+        assignedToID,
+        duedate,
+        sortBy,
+        sortOrder,
+    } = filter;
+
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+    if (search && search.trim() !== "") {
+        where.description = {
+            contains: search.trim(),
+        };
+    }
+    if (status) {
+        where.status = {
+            equals: status,
+        };
+    }
+    if (categoryId && categoryId != 0) {
+        where.categoryId = {
+            equals: categoryId,
+        }
+    }
+    if (assignedToID && assignedToID != 0) {
+        where.assignedToID = {
+            equals: assignedToID,
+        }
+    }
+    const orderBy = sortBy != null
+        ? { [sortBy]: sortOrder }
+        : { createdAt: "desc" as const };
+    console.log(orderBy);
     try {
-        const response = await prisma.todoItem.findMany({
+        const [response, total] = await Promise.all([prisma.todoItem.findMany({
+            where,
             include: {
                 categories: true,
                 assignedTo: true,
             },
-            orderBy: { id: 'asc' },
-        });
+            orderBy: orderBy,
+            skip,
+            take: limit,
+        }),
+        prisma.todoItem.count({
+            where,
+        }),
+        ]);
+        const totalPages = Math.ceil(total / limit);
+
         if (response) {
+            console.log(response);
             return JSON.parse(JSON.stringify({
                 success: true,
                 data: response,
+                totalPages: totalPages,
             }));
         }
         return JSON.parse(JSON.stringify({ error: 'Failed to fetch categories', success: false }));
@@ -35,9 +96,6 @@ export async function submitTodoForm(formData: FormData) {
         }
         const status = formData.get("status") != null ? 1 : 0;
         const createdAt = new Date();
-
-        const assignedToValue = formData.get("assignedToID")?.toString();
-        const categoriesValue = formData.get("categoriesID")?.toString();
 
         const assignedToID = formData.get("assignedToID") ? Number(formData.get("assignedToID")) : null;
         const categoriesID = formData.get("categoriesID") ? Number(formData.get("categoriesID")) : null;
@@ -132,7 +190,7 @@ export async function updateTodo(formData: FormData) {
         }));
 
     } catch (error) {
-         return JSON.parse(JSON.stringify({
+        return JSON.parse(JSON.stringify({
             error: 'Failed to update todo',
             success: false,
         }));
@@ -177,3 +235,4 @@ export async function deleteTodoItem(id: number) {
         return JSON.parse(JSON.stringify({ error: 'Failed to delete todo', success: false }));
     }
 }
+

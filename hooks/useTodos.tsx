@@ -3,6 +3,8 @@
 
 import { useState, useEffect } from "react";
 import * as Actions from "@/app/server/actions";
+import { usePagination } from "@/hooks/usePagination";
+import useFilter from "@/hooks/useFilter";
 export interface Todo {
   id: number;
   title: string;
@@ -30,6 +32,15 @@ export function useTodos() {
   const [user, setUser] = useState<any[]>([]);
   const [selectedUserData, setSelectedUserData] = useState<any>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  type SortColumn = "status" | "dueDate" | null;
+  const [sortBy, setSortBy] = useState<SortColumn>(null);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | "">("desc");
+  //pagination
+
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const { page, limit, setPage, nextPage, previousPage, changePage, changeLimit } = usePagination(10);
+
   async function getCategories() {
 
     try {
@@ -68,27 +79,35 @@ export function useTodos() {
     }
   }
   // Fetch todos
-  async function fetchTodosApi() {
-    try {
-      const response = await fetch("/api/todos");
-      const data = await response.json();
-      const parsedTodos = data.data.map((todo: any) => ({
-        ...todo,
-        dueDate: todo.dueDate ? new Date(todo.dueDate) : null,
-        createdAt: new Date(todo.createdAt),
-        updatedAt: new Date(todo.updatedAt),
-      }));
-      setTodos(data.data);
-    } catch (error) {
-      console.error("Failed to fetch todos:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  /* async function fetchTodosApi() {
+     try {
+       const response = await fetch("/api/todos");
+       const data = await response.json();
+       const parsedTodos = data.data.map((todo: any) => ({
+         ...todo,
+         dueDate: todo.dueDate ? new Date(todo.dueDate) : null,
+         createdAt: new Date(todo.createdAt),
+         updatedAt: new Date(todo.updatedAt),
+       }));
+       setTodos(data.data);
+     } catch (error) {
+       console.error("Failed to fetch todos:", error);
+     } finally {
+       setLoading(false);
+     }
+   }*/
 
   async function fetchTodos() {
+    const filter: any = {};
+    filter.page = page;
+    filter.limit = limit;
+    filter.sortBy = sortBy;
+    console.log(filter.sortBy);
+    filter.sortOrder = sortOrder;
+    filter.selectedUser = selectedUser;
     try {
-      const response = await Actions.getTodolist();
+      const response = await Actions.getTodolist(filter);
+      setTotalPages(response.totalPages);
       setTodos(response.data);
     } catch (error) {
       console.error("Failed to fetch todos:", error);
@@ -98,58 +117,63 @@ export function useTodos() {
   }
 
   useEffect(() => {
-    console.log("re");
+    getUser();
+    getCategories();
     fetchTodos();
-  }, []);
+  }, [page, limit, sortBy, sortOrder]);
 
   // Add todo
-  async function addTodoApi(value: string) {
-    const response = await fetch("/api/todos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ value }),
-    });
+  /* async function addTodoApi(value: string) {
+     const response = await fetch("/api/todos", {
+       method: "POST",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({ value }),
+     });
+ 
+     if (!response.ok) throw new Error("Failed to add todo");
+ 
+     await fetchTodos();
+   }*/
 
-    if (!response.ok) throw new Error("Failed to add todo");
+  async function addTodo(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
 
-    await fetchTodos();
-  }
-
-  async function addTodo(formData: FormData) {
     try {
       console.log("Form Data:", Object.fromEntries(formData.entries()));
-      const error = validateForm(formData)
-      if (Object.keys(error).length === 0) {
-        setErrors(error);
-
-      } else {
-        setErrors({});
+      const check_error = validateForm(Object.fromEntries(formData.entries()));
+      console.log(Object.keys(check_error).length);
+      if (Object.keys(check_error).length === 0) {
         const response = await Actions.submitTodoForm(formData);
         if (response.success) {
+          form.reset();
           alert("Todo added successfully!");
+          return response;
         } else {
-          console.log(response)
+          console.log(response);
           alert("Failed to add Todo!");
+          return response;
         }
       }
-
-      await fetchTodos();
     } catch (error) {
       console.error("Failed to fetch todos:", error);
     } finally {
+      await fetchTodos();
       setLoading(false);
     }
+    return null;
   }
 
   function validateForm(data: any) {
-
+    console.log("ll");
+    console.log(data);
     const errors: Record<string, string> = {};
-
-    if (!data.title || data.title.trim() === "") {
+    if (!data.title || data.title.trim() == "") {
       errors.title = "Title is required";
     }
 
-    if (!data.description || data.description.trim() === "") {
+    if (!data.description || data.description.trim() == "") {
       errors.description = "Description is required";
     }
 
@@ -157,10 +181,17 @@ export function useTodos() {
       errors.dueDate = "Due date is required";
     }
 
+    if (!isValidDate(data.dueDate)) {
+      errors.dueDate = "Due date is invalid";
+    }
+
     if (data.categoriesID < 1) {
       errors.categoriesID = "category is required";
     }
-    return errors;
+
+    setErrors(errors);
+    console.log(errors);
+    return (errors);
   }
 
   //Delete todo
@@ -170,29 +201,35 @@ export function useTodos() {
     if (!confirmed) return;
     const response = await Actions.deleteTodoItem(id);
 
+
     if (response.success) {
       alert("Todo deleted successfully!");
+      if(EditModal){
+        setEditModal(false);
+      }
     } else {
       alert("Failed to delete Todo!");
     }
-
     await fetchTodos();
+
   }
 
   // Toggle completion
   async function updateTodo(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const error = validateForm(formData);
-    if (Object.keys(error).length === 0) {
-
-    } else {
-      //const response = await Actions.updateTodo(formData);
+    const check_error = validateForm(Object.fromEntries(formData.entries()));
+    if (Object.keys(check_error).length == 0) {
+      const response = await Actions.updateTodo(formData);
+      if (response.success) {
+        alert("Todo deleted successfully!");
+      } else {
+        alert("Failed to delete Todo!");
+      }
     }
 
     //if (!response.ok) throw new Error("Failed to update todo");
-
-    //await fetchTodos();
+    fetchTodos();
   }
 
   async function showAddModal() {
@@ -214,6 +251,37 @@ export function useTodos() {
     setEditModal(true);
   }
 
+  function isValidDate(dateString: string): boolean {
+    const parts = dateString.split("/");
+
+    if (parts.length !== 3) return false;
+    const [day, month, year] = parts.map(Number);
+    if (!day || !month || !year) return false;
+    const date = new Date(year, month - 1, day);
+
+    return (
+      date.getDate() === day &&
+      date.getMonth() === month - 1 &&
+      date.getFullYear() === year
+    );
+  }
+
+  function handleSort(column: Exclude<SortColumn, null>) {
+    if (sortBy !== column) {
+      setSortBy(column);
+      setSortOrder("desc");
+    }
+    else if (sortOrder === "desc") {
+      setSortOrder("asc");
+    }
+    else {
+      setSortBy(null);
+      setSortOrder("desc");
+    }
+    setPage(1);
+    console.log(sortBy);
+  }
+
   return {
     todos,
     loading,
@@ -232,5 +300,18 @@ export function useTodos() {
     deleteTodo,
     showAddModal,
     showEditModal,
+    //pagination
+    total,
+    totalPages,
+    page,
+    limit,
+    nextPage,
+    previousPage,
+    changePage,
+    changeLimit,
+    handleSort,
+    sortBy,
+    sortOrder,
+
   };
 }
